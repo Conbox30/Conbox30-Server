@@ -2,8 +2,10 @@ import { exec, execSync } from 'child_process';
 import express from 'express';
 import os from 'os';
 import path from 'path';
+import fs from 'fs';
 
 const app = express();
+app.set('trust proxy', true);
 const port = 3000;
 
 app.use(express.urlencoded({ extended: true }));
@@ -13,23 +15,31 @@ app.get('/', (req, res) => {
     res.sendFile(path.resolve('login/index.html'));
 });
 app.get('/dashboard.html', (req, res)=>{
-    res.send('You cant not login with get')
+    res.send('You cant not login wiht get')
 })
 app.get('/dashboard', (req, res)=>{
-    res.send('You cant not login with get')
+    res.send('You cant not login wiht get')
 })
 app.post('/dashboard', (req,res)=>{
     let username = req.body.name;
     let pw = req.body.password;
 
     //pw and name
-    const ADMIN_USER = process.env.ADMIN_USER || 'YOUR_USERNAME';
-    const ADMIN_PASS = process.env.ADMIN_PASS || 'YOUR_PASSWORD';
+    const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+    const ADMIN_PASS = process.env.ADMIN_PASS || 'admin1234';
 
     if(username === ADMIN_USER  && pw === ADMIN_PASS ){
         res.sendFile(path.resolve('dashboard.html'));
+        const logMessage = `[${new Date().toISOString()}] successful login from IP: ${req.ip}\n`;
+        fs.appendFile('log.txt', logMessage, (err) => {
+            if (err) console.error('Error been write Error:', err);
+        });
     }
     else{
+        const logMessage = `[${new Date().toISOString()}] incorrect login from IP: ${req.ip}\n`;
+        fs.appendFile('log.txt', logMessage, (err) => {
+            if (err) console.error('Error been write Error:', err);
+        });
         res.send('Password or Username was wrong!')
     }
 });
