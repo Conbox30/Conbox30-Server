@@ -1,6 +1,6 @@
 # Conbox30-Server Setup:
 
-This is my learning with Nginx (Update: Oct 2026).
+This is my learning with Nginx (Update: Nov. 2026).
 
 ## Server info:
 
