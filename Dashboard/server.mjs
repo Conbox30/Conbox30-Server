@@ -15,18 +15,18 @@ app.get('/', (req, res) => {
     res.sendFile(path.resolve('login/index.html'));
 });
 app.get('/dashboard.html', (req, res)=>{
-    res.send('You cant not login wiht get')
+    res.send('You cant not login with get')
 })
 app.get('/dashboard', (req, res)=>{
-    res.send('You cant not login wiht get')
+    res.send('You cant not login with get')
 })
 app.post('/dashboard', (req,res)=>{
     let username = req.body.name;
     let pw = req.body.password;
 
     //pw and name
-    const ADMIN_USER = process.env.ADMIN_USER || //your username;
-    const ADMIN_PASS = process.env.ADMIN_PASS || //your password;
+    const ADMIN_USER = process.env.ADMIN_USER || //your username ;
+    const ADMIN_PASS = process.env.ADMIN_PASS || //your password ;
 
     if(username === ADMIN_USER  && pw === ADMIN_PASS ){
         res.sendFile(path.resolve('dashboard.html'));
@@ -44,7 +44,7 @@ app.post('/dashboard', (req,res)=>{
     }
 });
 app.post('/api/system-info', (req, res) => {
-   
+    
     let diskInfo = 'N/A';
     try {
         const dfOutput = execSync('df -h /').toString();
@@ -70,6 +70,7 @@ app.post('/api/system-info', (req, res) => {
     }
 
     res.json({
+        cpuPercent: os.loadavg()[0].toFixed(2),
         ramPercent: ramPercent,
         totalMemory: os.totalmem(),
         freeMemory: os.freemem(),
