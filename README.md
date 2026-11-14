@@ -7,15 +7,17 @@ This is my learning with Nginx (Update: Nov. 2026).
 OS: Ubuntu 26 Server
 Nginx as proxy,
 Node as webserver,
+expressjs as Framework,
+express-session for a secure login system,
 PM2 for autostart,
-System monitoring: are my own Dashboard
+System monitoring: is my own Dashboard
 
 ## Dashboard  Demo:
 ```bash
 https://conbox30.github.io/Conbox30-Server/
 ```
 
-If you has questions, write in Issues
+If you have questions, write in Issues
 
 To generate a self-signed SSL certificate for HTTPS:
 ```bash
