@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="icon" type="image/png" href="dashboard.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=login" />
     <style>
         body{
             background-color: #111;
@@ -17,91 +18,49 @@
             text-align: center;
             gap: 20px;
         }
-        /* From Uiverse.io by bociKond */ 
-        .form {
-            --bg-light: #efefef;
-            --bg-dark: #707070;
-            --clr: #58bc82;
-            --clr-alpha: #9c9c9c60;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .form .input-span {
-            width: 100%;
+        .form{
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 20px;
+            color: white;
+            height: 300px;
+            width: 300px;
+            text-align: center;
         }
-
-        .form input[type="text"],
-        .form input[type="password"] {
-            border-radius: 0.5rem;
-            padding: 1rem 0.75rem;
-            width: 100%;
-            border: none;
-            display: flex;
-            align-items: center;
-            color: #58bc82;
-            gap: 0.5rem;
-            background-color: var(--clr-alpha);
-            outline: 2px solid var(--bg-dark);
-        }
-
-        .form input[type="text"]:focus,
-        .form input[type="password"]:focus {
-            outline: 2px solid var(--clr);
-        }
-
-        .label {
-            align-self: flex-start;
-            color: var(--clr);
-            font-weight: 600;
-        }
-
-        .form button {
-            padding: 1rem 0.75rem;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-radius: 3rem;
-            padding: 10px 120px;
-            background-color: var(--bg-dark);
-            color: var(--bg-light);
-            border: none;
-            cursor: pointer;
-            transition: all 300ms;
-            font-weight: 600;
-            font-size: 0.9rem;
-            
-        }
-
-        .form button:hover {
-            background-color: var(--clr);
-            color: var(--bg-dark);
-        }
-
-        .span {
-            text-decoration: none;
-            color: var(--bg-dark);
+        h1{
+            color: #ea580c;
         }
         .login{
             margin-top: 100px;
-            display: block;
-            justify-content: center;
-            align-items: center;
-            text-align: center; 
-            width: 400px;
-            height: 400px;
-            margin-left: 10px;
-            margin-right: 10px;
-        
+        }
+        input{
+            color: #ea580c;
+            outline: none;
+            background-color: #222;
+            border: 2px solid #ea580c;
+            padding: 10px 6px;
+            font-size: 12px;
+            border-radius: 12px;
+        }
+        input:focus{
+            outline: 2px solid #ea5a0c;
+        }
+        button{
+            background-color: #222;
+            padding: 10px 10px;
+            border-radius: 10px;
+            border: 2px solid #ea580c;
+            color: white;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        button:hover{
+            transform: scale(1.02);
+            background-color: #ea5a0c;
+            border: 2px solid #ea5a0c;
+        }
+        button:active{
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -109,17 +68,15 @@
     <main>
         <div class="login">
             <form class="form" onsubmit="login(event)">
-                <h1 style="color: #58bc82;">Login</h1>
-                <span class="input-span">
+                <h1>Login Dashboard (Demo)</h1>
                     <label class="label">Username</label>
-                    <input type="text" name="name" id="name"  required placeholder="Username" autocomplete="off" autofocus/>
-                </span>
-                <span class="input-span">
+                    <input type="text" name="name" id="name"  required placeholder="Username...." autocomplete="off" autofocus/>
                     <label for="password" class="label">Password</label>
-                    <input type="password" name="password" id="passwd"  required placeholder="Username" autocomplete="off" autofocus/>
+                    <input type="password" name="password" id="passwd"  required placeholder="Password...." autocomplete="off" autofocus/>
                 </span>
                 <a style="color: gray; cursor: pointer;" onclick="alert('For the Demo version of my dashboard is Username: admin, Password: admin1234')">Password or Username forget?</a>
-                <button type="submit">Submit</button>
+                <button type="submit" style="display: flex; justify-content: center; align-items: center; gap: 2px;"><span style="color:#ea580c" class="material-symbols-outlined">login</span>Submit</button>
+                <a style="color: gray; cursor: pointer;">Version: 2.0</a>
             </form>
 
         </div>
@@ -132,7 +89,7 @@
             const name = document.getElementById('name').value;
             const pw = document.getElementById('passwd').value;            
 
-            //for Demos is this okay! For real Login system is this NOT SECURE!!            
+            //for Demos is this okay! But for real Login system is this NOT SECURE!!            
             if(name === 'admin' && pw === 'admin1234'){
                 window.location.replace('dashboard.html')
             }
