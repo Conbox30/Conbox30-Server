@@ -1,5 +1,6 @@
 import { exec, execSync } from 'child_process';
 import express from 'express';
+import session from 'express-session';
 import os from 'os';
 import path from 'path';
 import fs from 'fs';
@@ -11,40 +12,87 @@ const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('login'))
 
+//Session Settings
+app.use(session({
+    secret: 'conboxkey',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 30 * 60 * 1000,
+        httpOnly: true
+    } 
+}));
+
+app.use('/api/', (req, res, next) => {
+    if(!req.session.authenticated) {
+        return res.status(403).json({error: 'Unauthorized'});
+    }
+    next();
+})
+
 app.get('/', (req, res) => {
+    if(req.session.authenticated) {
+        return res.redirect('/dashboard');
+    }
+
     res.sendFile(path.resolve('login/index.html'));
 });
 app.get('/dashboard.html', (req, res)=>{
-    res.send('You cant not login with get')
+    res.redirect('/dashboard')
 })
 app.get('/dashboard', (req, res)=>{
-    res.send('You cant not login with get')
+    if(!req.session.authenticated){
+        return res.redirect('/index.html');
+    }
+
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
+    res.sendFile(path.resolve('dashboard.html'));  
 })
+//login
 app.post('/dashboard', (req,res)=>{
     let username = req.body.name;
     let pw = req.body.password;
 
     //pw and name
-    const ADMIN_USER = process.env.ADMIN_USER || //your username ;
-    const ADMIN_PASS = process.env.ADMIN_PASS || //your password ;
+    const ADMIN_USER = process.env.ADMIN_USER || //your username;
+    const ADMIN_PASS = process.env.ADMIN_PASS || //your password;
 
     if(username === ADMIN_USER  && pw === ADMIN_PASS ){
-        res.sendFile(path.resolve('dashboard.html'));
+        req.session.authenticated = true;
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+        
         const logMessage = `[${new Date().toISOString()}] successful login from IP: ${req.ip}\n`;
         fs.appendFile('log.txt', logMessage, (err) => {
             if (err) console.error('Error been write Error:', err);
         });
+
+        return res.redirect('/dashboard');
     }
     else{
-        const logMessage = `[${new Date().toISOString()}] incorrect login from IP: ${req.ip}\n`;
+        const logMessage = `[${new Date().toISOString()}] incorrect login from IP: ${req.ip}, Username: ${req.body.name}, Password: ${req.body.password} \n`;
         fs.appendFile('log.txt', logMessage, (err) => {
             if (err) console.error('Error been write Error:', err);
         });
-        res.send('Password or Username was wrong!')
+
+        res.sendFile(path.resolve('error.html'))
     }
 });
+//logout
+app.post('/logout', (req,res)=>{
+    req.session.destroy((err) => {
+        if(err){
+            console.error('Logout error:', err)
+        };
+        res.clearCookie('connect.sid');
+        return res.redirect('/');
+    });
+});
+//System info 
 app.post('/api/system-info', (req, res) => {
-    
+   
     let diskInfo = 'N/A';
     try {
         const dfOutput = execSync('df -h /').toString();
@@ -69,6 +117,26 @@ app.post('/api/system-info', (req, res) => {
         temp = 'N/A';
     }
 
+    //Check Services: SSH, SMB, ...
+    let sshstatus = 'stopped';
+    let smbstatus = 'stopped';
+    //check ssh:
+    try{
+        const sshCheck = execSync('systemctl is-active ssh').toString().trim();
+        if(sshCheck === 'active') sshstatus = 'running🟢';
+    } catch(e){
+        sshstatus = 'stopped🔴';
+    }
+    //Check smb:
+    try{
+        const smbCheck = execSync('systemctl is-active smbd').toString().trim();
+        if(smbCheck === 'active') smbstatus = 'running🟢';
+    }catch(e){
+        smbstatus = 'stopped🔴';
+    }
+
+    //If you would like to add anything else here for example, Nginx you can do so at this point.
+    
     res.json({
         cpuPercent: os.loadavg()[0].toFixed(2),
         ramPercent: ramPercent,
@@ -81,10 +149,14 @@ app.post('/api/system-info', (req, res) => {
         platform: os.platform(),         
         architecture: os.arch(),
         temp: temp,
-        disk: diskInfo
+        disk: diskInfo,
+        services: {
+            ssh: sshstatus,
+            smb: smbstatus,
+        },
     });
 }); 
-
+//button reboot
 app.post('/api/reboot', (req, res) => {
     res.json({ message: 'System has rebooted!' });
 
@@ -96,7 +168,7 @@ app.post('/api/reboot', (req, res) => {
         });
     }, 2000);
 });
-
+//button shutdown
 app.post('/api/shutdown', (req, res) => {
     res.json({ message: 'System was Shutdown' });
 
@@ -108,7 +180,7 @@ app.post('/api/shutdown', (req, res) => {
         });
     }, 2000);
 });
-
+//server start
 app.listen(port, '0.0.0.0', () => {
     console.log('Dashboard was running!');
 });
