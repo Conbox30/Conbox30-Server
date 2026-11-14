@@ -181,6 +181,6 @@ app.post('/api/shutdown', (req, res) => {
     }, 2000);
 });
 //server start
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, '127.0.0.1', () => {
     console.log('Dashboard was running!');
 });
