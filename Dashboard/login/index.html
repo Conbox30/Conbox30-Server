@@ -17,91 +17,49 @@
             text-align: center;
             gap: 20px;
         }
-        /* From Uiverse.io by bociKond */ 
-        .form {
-            --bg-light: #efefef;
-            --bg-dark: #707070;
-            --clr: #58bc82;
-            --clr-alpha: #9c9c9c60;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .form .input-span {
-            width: 100%;
+        .form{
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 20px;
+            color: white;
+            height: 300px;
+            width: 300px;
+            text-align: center;
         }
-
-        .form input[type="text"],
-        .form input[type="password"] {
-            border-radius: 0.5rem;
-            padding: 1rem 0.75rem;
-            width: 100%;
-            border: none;
-            display: flex;
-            align-items: center;
-            color: #58bc82;
-            gap: 0.5rem;
-            background-color: var(--clr-alpha);
-            outline: 2px solid var(--bg-dark);
-        }
-
-        .form input[type="text"]:focus,
-        .form input[type="password"]:focus {
-            outline: 2px solid var(--clr);
-        }
-
-        .label {
-            align-self: flex-start;
-            color: var(--clr);
-            font-weight: 600;
-        }
-
-        .form button {
-            padding: 1rem 0.75rem;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-radius: 3rem;
-            padding: 10px 120px;
-            background-color: var(--bg-dark);
-            color: var(--bg-light);
-            border: none;
-            cursor: pointer;
-            transition: all 300ms;
-            font-weight: 600;
-            font-size: 0.9rem;
-            
-        }
-
-        .form button:hover {
-            background-color: var(--clr);
-            color: var(--bg-dark);
-        }
-
-        .span {
-            text-decoration: none;
-            color: var(--bg-dark);
+        h1{
+            color: #ea580c;
         }
         .login{
             margin-top: 100px;
-            display: block;
-            justify-content: center;
-            align-items: center;
-            text-align: center; 
-            width: 400px;
-            height: 400px;
-            margin-left: 10px;
-            margin-right: 10px;
-        
+        }
+        input{
+            color: #ea580c;
+            outline: none;
+            background-color: #222;
+            border: 2px solid #ea580c;
+            padding: 10px 6px;
+            font-size: 12px;
+            border-radius: 12px;
+        }
+        input:focus{
+            outline: 2px solid #ea5a0c;
+        }
+        button{
+            background-color: #222;
+            padding: 10px 10px;
+            border-radius: 10px;
+            border: 2px solid #ea580c;
+            color: white;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        button:hover{
+            transform: scale(1.02);
+            background-color: #ea5a0c;
+            border: 2px solid #ea5a0c;
+        }
+        button:active{
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -109,16 +67,13 @@
     <main>
         <div class="login">
             <form class="form" action="/dashboard" method="post">
-                <h1 style="color: #58bc82;">Login</h1>
-                <span class="input-span">
-                    <label class="label">Username</label>
-                    <input type="text" name="name"  required placeholder="Username" autocomplete="off" autofocus/>
-                </span>
-                <span class="input-span">
-                    <label for="password" class="label">Password</label>
-                    <input type="password" name="password"  required placeholder="Username" autocomplete="off" autofocus/>
-                </span>
-                <button type="submit" >Submit</button>
+                <h1>Login Dashboard</h1>
+                <label>Username:</label>
+                <input type="text" name="name"  required placeholder="Username" autocomplete="off" autofocus/>
+
+                <label>Password:</label>
+                <input type="password" name="password"  required placeholder="Username" autocomplete="off" autofocus/>
+                <button type="submit" style="display: flex; justify-content: center; align-items: center; gap: 2px;" ><img src="login_24dp_EA580C_FILL0_wght400_GRAD0_opsz24.png" alt=""> Submit</button>
             </form>
 
         </div>
